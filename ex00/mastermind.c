@@ -92,9 +92,10 @@ int main(int ac, char** av) {
         int mpp = mpp_calc(code, guess); // function to count misplaced pieces
         if (wpp == 4) {
             printf("Congratz! You did it!\n");
-            break;
+            return 0;
         }
         printf("Well placed pieces: %d\nMisplaced pieces: %d\n", wpp, mpp);
     }
+    printf("---\nYou ran out of attempts! :(\nThe secret code was: %s\nTry again.\n", code);
     return 0;
 }
