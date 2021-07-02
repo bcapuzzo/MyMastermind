@@ -3,6 +3,8 @@
 #include <time.h>
 #include <unistd.h>
 
+// Calculates Well Placed Pieces
+// s1 is the secret code and s2 is the user's guess
 int wpp_calc(char* s1, char* s2) {
     int wpp_ctr = 0;
     for (int ctr = 0; s1[ctr] != 0 && s2[ctr] != 0; ctr++) { 
@@ -13,11 +15,36 @@ int wpp_calc(char* s1, char* s2) {
     return wpp_ctr;
 }
 
+// Calculates Misplaced Pieces
+// s1 is the secret code and s2 is the user's guess
+// int mpp_calc(char* s1, char* s2) {
+//     int mpp_ctr = 0;
+//     for (int ctr = 0; ctr < 4; ctr++) { 
+//         for (int ctr_2 = 0; ctr_2 < 4; ctr_2++) { 
+            
+//             if (ctr != ctr_2 && // if same columns match, then it is a wpp
+//                     (int)s2[ctr] == (int)s1[ctr_2] && // makes sure the piece exists somewhere else in code
+//                     (int)s2[ctr_2] != (int)s1[ctr_2] && // 
+//                     (int)s2[ctr] != (int)s1[ctr]) // 
+//                 {
+//                 mpp_ctr++;
+//                 break;
+//             }
+//         }
+//     }
+//     return mpp_ctr;
+// }
+
+// REVISED FUNCTION
 int mpp_calc(char* s1, char* s2) {
     int mpp_ctr = 0;
-    for (int ctr = 0; s1[ctr] != 0 && s2[ctr] != 0; ctr++) { 
-        for (int ctr_2 = 0; s1[ctr_2] != 0; ctr_2++) { 
-            if (ctr != ctr_2 && (int)s2[ctr] == (int)s1[ctr_2]) {
+    for (int ctr = 0; ctr < 4; ctr++) { 
+        if ((int)s2[ctr] == (int)s1[ctr]) { // the guess for that column is correct
+            continue;
+        }
+        for (int ctr_2 = 0; ctr_2 < 4; ctr_2++) { 
+            if ((int)s2[ctr] == (int)s1[ctr_2] && // makes sure the piece exists somewhere else in code
+                    (int)s2[ctr_2] != (int)s1[ctr_2]) {
                 mpp_ctr++;
                 break;
             }
@@ -90,12 +117,26 @@ int main(int ac, char** av) {
         }
         int wpp = wpp_calc(code, guess); // function to count well placed pieces
         int mpp = mpp_calc(code, guess); // function to count misplaced pieces
-        if (wpp == 4) {
+        if (wpp == 4) { // all four guessed numbers are correct
             printf("Congratz! You did it!\n");
             return 0;
         }
-        printf("Well placed pieces: %d\nMisplaced pieces: %d\n", wpp, mpp);
+        printf("Well placed pieces: %d\nMisplaced pieces: %d\n", wpp, mpp); // report results of comparing guess to secret code
     }
-    printf("---\nYou ran out of attempts! :(\nThe secret code was: %s\nTry again.\n", code);
+    printf("---\nYou ran out of attempts! :(\nThe secret code was: %s\n", code);
     return 0;
 }
+
+/*
+Fix this scenario to only 1 misplaced
+
+Will you find the secret code?
+---
+Round 0
+6244 
+Well placed pieces: 0
+Misplaced pieces: 2
+---
+You ran out of attempts! :(
+The secret code was: 7400
+*/
