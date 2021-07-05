@@ -17,25 +17,6 @@ int wpp_calc(char* s1, char* s2) {
 
 // Calculates Misplaced Pieces
 // s1 is the secret code and s2 is the user's guess
-// int mpp_calc(char* s1, char* s2) {
-//     int mpp_ctr = 0;
-//     for (int ctr = 0; ctr < 4; ctr++) { 
-//         for (int ctr_2 = 0; ctr_2 < 4; ctr_2++) { 
-            
-//             if (ctr != ctr_2 && // if same columns match, then it is a wpp
-//                     (int)s2[ctr] == (int)s1[ctr_2] && // makes sure the piece exists somewhere else in code
-//                     (int)s2[ctr_2] != (int)s1[ctr_2] && // 
-//                     (int)s2[ctr] != (int)s1[ctr]) // 
-//                 {
-//                 mpp_ctr++;
-//                 break;
-//             }
-//         }
-//     }
-//     return mpp_ctr;
-// }
-
-// REVISED FUNCTION
 int mpp_calc(char* s1, char* s2) {
     int mpp_ctr = 0;
     // integer array tracks if a location of code has already been used for a misplaced piece
@@ -91,7 +72,6 @@ char* random_code_generator() {
     return secret;
 }
 
-// only numbers 0 through 7
 int main(int ac, char** av) {
     char* code = random_code_generator(); // randomly generated code
     int attempts = 10;
