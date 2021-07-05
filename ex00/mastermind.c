@@ -38,13 +38,22 @@ int wpp_calc(char* s1, char* s2) {
 // REVISED FUNCTION
 int mpp_calc(char* s1, char* s2) {
     int mpp_ctr = 0;
-    for (int ctr = 0; ctr < 4; ctr++) { 
-        if ((int)s2[ctr] == (int)s1[ctr]) { // the guess for that column is correct
-            continue;
+    // integer array tracks if a location of code has already been used for a misplaced piece
+    int* locations = malloc(4*sizeof(int));
+    for (int i = 0; i < 4; i++) {
+        if ((int)s2[i] == (int)s1[i]) { // the guess for that column is correct
+            locations[i] = 1;
         }
-        for (int ctr_2 = 0; ctr_2 < 4; ctr_2++) { 
-            if ((int)s2[ctr] == (int)s1[ctr_2] && // makes sure the piece exists somewhere else in code
-                    (int)s2[ctr_2] != (int)s1[ctr_2]) {
+        else {
+            locations[i] = 0;
+        }
+    }
+    // iterates through each location in the guessed code
+    for (int ctr_g = 0; ctr_g < 4; ctr_g++) { 
+        for (int ctr_c = 0; ctr_c < 4; ctr_c++) { 
+            if ((int)s2[ctr_g] == (int)s1[ctr_c] && // makes sure the piece exists somewhere else in code
+                    locations[ctr_c] != 1) { // makes sure location has not already been used for misplaced piece
+                locations[ctr_c] = 1;
                 mpp_ctr++;
                 break;
             }
@@ -126,17 +135,3 @@ int main(int ac, char** av) {
     printf("---\nYou ran out of attempts! :(\nThe secret code was: %s\n", code);
     return 0;
 }
-
-/*
-Fix this scenario to only 1 misplaced
-
-Will you find the secret code?
----
-Round 0
-6244 
-Well placed pieces: 0
-Misplaced pieces: 2
----
-You ran out of attempts! :(
-The secret code was: 7400
-*/
