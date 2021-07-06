@@ -19,22 +19,29 @@ int wpp_calc(char* s1, char* s2) {
 // s1 is the secret code and s2 is the user's guess
 int mpp_calc(char* s1, char* s2) {
     int mpp_ctr = 0;
-    // integer array tracks if a location of code has already been used for a misplaced piece
-    int* locations = malloc(4*sizeof(int));
+    // integer arrays track if a location of code has already been used for a 
+    // misplaced piece or if has a well-placed piece
+    int* w_loc = malloc(4*sizeof(int));
+    int* g_loc = malloc(4*sizeof(int));
     for (int i = 0; i < 4; i++) {
-        if ((int)s2[i] == (int)s1[i]) { // the guess for that column is correct
-            locations[i] = 1;
+        if ((int)s2[i] == (int)s1[i]) { // the guess for that column is correct/well-placed
+            w_loc[i] = 1;
         }
         else {
-            locations[i] = 0;
+            w_loc[i] = 0;
         }
+        g_loc[i] = 0;
     }
     // iterates through each location in the guessed code
     for (int ctr_g = 0; ctr_g < 4; ctr_g++) { 
+        if (w_loc[ctr_g] == 1) { // if the guessed digit is already correct, do not look for misplacement
+            continue;
+        }
         for (int ctr_c = 0; ctr_c < 4; ctr_c++) { 
             if ((int)s2[ctr_g] == (int)s1[ctr_c] && // makes sure the piece exists somewhere else in code
-                    locations[ctr_c] != 1) { // makes sure location has not already been used for misplaced piece
-                locations[ctr_c] = 1;
+                    g_loc[ctr_c] != 1 && // makes sure location has not already been used for misplaced piece
+                    w_loc[ctr_c] != 1) { // makes sure location is not already a well-placed digit
+                g_loc[ctr_c] = 1; // update the location as used for misplaced counter
                 mpp_ctr++;
                 break;
             }
